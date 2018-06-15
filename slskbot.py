@@ -543,8 +543,8 @@ def commands(room, line):
 			r = requests.get("https://favqs.com/api/qotd")
 			r = r.json()
 			send(room, '%s - %s' % (r['quote']['body'], r['quote']['author']))
-		if (sylco(b) > 5) and ("tant" not in name):
-			if (random.randint(0, 40) == 2) or (b.startswith("  ")):
+		if (sylco(b) > 5) and (sylco(b) < 12) and ("tant" not in name):
+			if (random.randint(0, 100) == 2) or (b.startswith("   ")):
 				if room == "mutants":
 					word = b.rsplit(None, 1)[-1]
 					print word
