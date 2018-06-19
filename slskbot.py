@@ -546,7 +546,7 @@ def commands(room, line):
 		if (sylco(b) > 5) and (sylco(b) < 12) and ("tant" not in name):
 			if (random.randint(0, 100) == 2) or (b.startswith("   ")):
 				if room == "mutants":
-					word = b.rsplit(None, 1)[-1]
+					word = b.rsplit(None, 1)[-1].lower()
 					print word
 					rhymes = pronouncing.rhymes(word)
 					print rhymes
@@ -627,9 +627,8 @@ while True:
 	#check for 'None' on !art year
 	#intestinate
 	#link aggregator
-	#~ disables yt title
 	#split on ' ' and check each word for http, then send to video_id
-	#corp
+	#corporae
 	#get commands thru pm
 	#twitter search
 	#youtube search
