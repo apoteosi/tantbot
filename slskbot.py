@@ -565,6 +565,32 @@ def commands(room, line):
 								send(room, "ay")
 								break
 
+		#log haiku generator
+		if b=="!haiku\n":
+			slines = open("%s.log" % room).read().splitlines()
+			random.shuffle(slines)
+			line1 = ''
+			line2 = ''
+			line3 = ''
+			for sline in slines:
+				text = sline.rsplit(']',1)[-1][1:]
+				if sylco(text)==5:
+					if line1 == '':
+						line1 = text
+					else
+						line3 = text
+						break
+			for sline in slines:
+				text = sline.rsplit(']',1)[-1][1:]
+				if sylco(text)==7:
+					line2 = text
+			send(room, line1)
+			send(room, line2)
+			send(room, line3)
+
+
+
+
 
 
 	except Exception:
@@ -632,3 +658,4 @@ while True:
 	#get commands thru pm
 	#twitter search
 	#youtube search
+	#set up files in sane directories
