@@ -234,11 +234,11 @@ def commands(room, line):
 
 
 		#listing of available commands
-		if b=="!help\n":
+		if b=="!commands\n":
 			if room == "mutants":
-				send(room, '!addquote ***\n!quote\n!req ***\n!tweet\n!rand #\n!t ***\n!hi\n!art\n!art ***\n!news\n!news ***\n!benny\n!dev ***\n!clap ***\n!def ***')
+				send(room, '!addquote *** !quote !req *** !t *** !hi !art !art ***\n!news !news *** !dev *** !clap *** !def *** !sandwich !diagnose !oracle !slap [user]\n!movie *** !listmovies !sonnet !chuck !dog !qotd !haiku !wiki !advice !link')
 			if room == "star fish":				
-				send(room, '!addquote ***\n!quote\n!req ***\n!t ***\n!hi\n!art\n!art ***\n!news\n!news ***\n!dev ***\n!clap ***\n!def ***')
+				send(room, '!addquote *** !quote !req *** !t *** !hi !art !art ***\n!news !news *** !dev *** !clap *** !def *** !sandwich !diagnose !oracle !slap ***\n!movie *** !listmovies !sonnet !chuck !dog !qotd !haiku !wiki !advice !link')
 			
 		#request features, appends to local requests.log
 		if b.startswith("!req "):
@@ -510,17 +510,17 @@ def commands(room, line):
 				send(room, "it's Elma now")
 
 		#request muvies
-		if b.startswith("!muvie "):
+		if b.startswith("!movie "):
 			send(room, "i added it thanks")
 			req = open("muvies.log", "a+")
 			req.write(b[7:])
 			req.close()
-			print "muvie added:"
+			print "movie added:"
 			print b
 
-		if b=="!listmuvies\n":
+		if b=="!listmovies\n":
 			ms = open("muvies.log").read().splitlines()
-			send(room, "muvie list:")
+			send(room, "movie list:")
 			for m in ms:
 				send(room, m)
 
