@@ -577,7 +577,7 @@ def commands(room, line):
 				if sylco(text)==5:
 					if line1 == '':
 						line1 = text
-					else
+					else:
 						line3 = text
 						break
 			for sline in slines:
@@ -585,7 +585,9 @@ def commands(room, line):
 				if sylco(text)==7:
 					line2 = text
 			send(room, line1)
+			time.sleep(1)
 			send(room, line2)
+			time.sleep(1)
 			send(room, line3)
 
 
