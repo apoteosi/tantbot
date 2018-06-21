@@ -30,7 +30,7 @@ def send(room, msg):
 	msg = msg.replace('\n', '\n/me | ')
 	subprocess.call('museekcontrol --chat "%s" --message "/me | %s"' % (room, msg), shell=True)
 
-import re
+
 
 def sylco(word) :
 
@@ -601,7 +601,16 @@ def commands(room, line):
 			r = r.json()
 			send(room, r['slip']['advice'])
 
-
+		if b=="!link\n":
+			slines = open("%s.log" % room).read().splitlines()
+			random.shuffle(slines)
+			for line in slines:
+				links = ''
+				f = re.search("(?P<url>https?://[^\s]+)", line)
+				if f:
+					f = f.group('url')
+					send(room, f)
+					break
 
 	except Exception:
 		print sys.exc_info()[0]
