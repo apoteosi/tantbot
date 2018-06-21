@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import wikipedia as wiki
 import pronouncing
 from newsapi import NewsApiClient
 import urllib2
@@ -590,8 +591,15 @@ def commands(room, line):
 			time.sleep(1)
 			send(room, line3)
 
+		if b=="!wiki\n":
+			list = wiki.random()
+			page = wiki.page(title=list)
+			send(room, page.url)
 
-
+		if b=="!advice\n":
+			r = requests.get("http://api.adviceslip.com/advice")
+			r = r.json()
+			send(room, r['slip']['advice'])
 
 
 
@@ -603,8 +611,9 @@ def commands(room, line):
 ###############  INIT  ###############
 
 #### TESTBOX ####
-
-
+r = requests.get("http://api.adviceslip.com/advice")
+r = r.json()
+print r['slip']['advice']
 #### TESTBOX ####
 
 #join star fish
