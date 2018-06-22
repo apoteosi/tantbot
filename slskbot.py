@@ -512,14 +512,21 @@ def commands(room, line):
 		#request muvies
 		if b.startswith("!movie "):
 			send(room, "i added it thanks")
-			req = open("muvies.log", "a+")
+			if room=="mutants":
+				req = open("muvies.log", "a+")
+			elif room=="star fish":
+				req = open("starmuvies.log", "a+")
 			req.write(b[7:])
 			req.close()
 			print "movie added:"
 			print b
 
 		if b=="!listmovies\n":
-			ms = open("muvies.log").read().splitlines()
+			
+			if room=="mutants":
+				ms = open("muvies.log").read().splitlines()
+			elif room=="star fish":
+				ms = open("starmuvies.log").read().splitlines()
 			send(room, "movie list:")
 			for m in ms:
 				send(room, m)
@@ -612,6 +619,12 @@ def commands(room, line):
 					send(room, f)
 					break
 
+		if b=="!startup\n":
+			r = requests.get("http://itsthisforthat.com/api.php?text")
+			r = r.text
+			send(room, r)
+
+
 	except Exception:
 		print sys.exc_info()[0]
 		print "i broke\n"
@@ -620,9 +633,9 @@ def commands(room, line):
 ###############  INIT  ###############
 
 #### TESTBOX ####
-r = requests.get("http://api.adviceslip.com/advice")
-r = r.json()
-print r['slip']['advice']
+r = requests.get("http://itsthisforthat.com/api.php?text")
+r = r.text
+print r
 #### TESTBOX ####
 
 #join star fish
