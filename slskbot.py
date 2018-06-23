@@ -625,6 +625,7 @@ def commands(room, line):
 			r = r.text
 			send(room, r)
 
+		#4chan random topic
 		if b.startswith("!chan "):
 			boardname = b[6:].strip('\n')
 			board = basc_py4chan.Board(boardname)
@@ -635,6 +636,12 @@ def commands(room, line):
 			comment = topic.comment
 			send(room, comment.replace('<br>', ' '))
 
+		#twitter search
+		if b.startswith("!twit "):
+			query = b[6:].strip('\n')
+			tweets = api.search(query)
+			tweet = random.choice(tweets)
+			send(room, tweet.text)
 
 
 
