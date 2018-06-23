@@ -23,6 +23,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 import pycorpora as corp
+import basc_py4chan
 
 ###############  FUNC  ###############
 
@@ -238,7 +239,7 @@ def commands(room, line):
 			if room == "mutants":
 				send(room, '!addquote *** !quote !req *** !t *** !hi !art !art ***\n!news !news *** !dev *** !clap *** !def *** !sandwich !diagnose !oracle !slap [user]\n!movie *** !listmovies !sonnet !chuck !dog !qotd !haiku !wiki !advice !link')
 			if room == "star fish":				
-				send(room, '!addquote *** !quote !req *** !t *** !hi !art !art ***\n!news !news *** !dev *** !clap *** !def *** !sandwich !diagnose !oracle !slap ***\n!movie *** !listmovies !sonnet !chuck !dog !qotd !haiku !wiki !advice !link')
+				send(room, '!addquote *** !quote !req *** !t *** !hi !art !art ***\n!news !news *** !dev *** !clap *** !def *** !sandwich !diagnose !oracle !slap ***\n!movie *** !listmovies !sonnet !chuck !dog !qotd !haiku !wiki !advice !link !startup')
 			
 		#request features, appends to local requests.log
 		if b.startswith("!req "):
@@ -624,6 +625,18 @@ def commands(room, line):
 			r = r.text
 			send(room, r)
 
+		if b.startswith("!chan "):
+			boardname = b[6:].strip('\n')
+			board = basc_py4chan.Board(boardname)
+			threads = board.get_all_thread_ids()
+			threadid = random.choice(threads)
+			thread = board.get_thread(threadid)
+			topic = thread.topic
+			comment = topic.comment
+			send(room, comment.replace('<br>', ' '))
+
+
+
 
 	except Exception:
 		print sys.exc_info()[0]
@@ -633,9 +646,6 @@ def commands(room, line):
 ###############  INIT  ###############
 
 #### TESTBOX ####
-r = requests.get("http://itsthisforthat.com/api.php?text")
-r = r.text
-print r
 #### TESTBOX ####
 
 #join star fish
@@ -692,3 +702,4 @@ while True:
 	#twitter search
 	#youtube search
 	#set up files in sane directories
+	#number before ! to repeat commands
