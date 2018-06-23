@@ -643,7 +643,8 @@ def commands(room, line):
 			while 1:
 				tweet = random.choice(tweets)
 				if 'RT' not in tweet.text:
-					break
+					if tweet.text[0] != '@':
+						break
 			send(room, tweet.text)
 
 
