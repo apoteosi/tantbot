@@ -640,7 +640,10 @@ def commands(room, line):
 		if b.startswith("!twit "):
 			query = b[6:].strip('\n')
 			tweets = api.search(query)
-			tweet = random.choice(tweets)
+			while 1:
+				tweet = random.choice(tweets)
+				if 'RT' not in tweet.text:
+					break
 			send(room, tweet.text)
 
 
@@ -653,6 +656,7 @@ def commands(room, line):
 ###############  INIT  ###############
 
 #### TESTBOX ####
+
 #### TESTBOX ####
 
 #join star fish
