@@ -491,7 +491,7 @@ def commands(room, line):
 
 		if b.startswith("!slap "):
 			victim = b[6:].strip("\n")
-			verbs = ['slaps','smacks','bludgeons','uppercuts','brutally murders']
+			verbs = ['slaps','smacks','bludgeons','uppercuts']
 			_verb = random.choice(verbs)
 			_obj = random.choice(corp.objects.objects['objects'])
 			if _obj[0] in ['a','e','i','o','u']:
