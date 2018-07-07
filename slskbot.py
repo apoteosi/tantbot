@@ -672,7 +672,30 @@ def commands(room, line):
 			send(room, "your mood: {}".format(mood))
 			send(room, "you are feeling {}".format(kw))
 			
-			
+		if b=="!iching\n":
+			num = random.randint(1,64)
+			url = "http://reoxy.org/iching/{}.html"
+			r = requests.get(url.format(num))
+			html = BeautifulSoup(r.text)
+			name = html.title.text[10:]
+			char = unichr(19903+num)		
+			send(room, "{} {}".format(name, url.format(num)))
+
+		if b=="!joke\n":
+			r = requests.get("https://08ad1pao69.execute-api.us-east-1.amazonaws.com/dev/random_ten")
+			r = r.json()
+			while 1:
+				joke = random.choice(r)
+				if joke['type'] == 'general':
+					break
+			send(room, joke['setup'])
+			time.sleep(5)
+			send(room, joke['punchline'])
+
+		if b=="!trump\n":
+			r = requests.get("https://api.tronalddump.io/random/quote")
+			r = r.json()
+			send(room, r['value'])
 
 	except Exception:
 		print sys.exc_info()[0]
