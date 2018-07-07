@@ -679,7 +679,7 @@ def commands(room, line):
 			html = BeautifulSoup(r.text)
 			name = html.title.text[10:]
 			char = unichr(19903+num)		
-			send(room, "{} {}".format(name, url.format(num)))
+			send(room, u"{} - {} {}".format(char, name, url.format(num)))
 
 		if b=="!joke\n":
 			r = requests.get("https://08ad1pao69.execute-api.us-east-1.amazonaws.com/dev/random_ten")
