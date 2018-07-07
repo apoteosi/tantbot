@@ -554,12 +554,15 @@ def commands(room, line):
 			send(room, '%s - %s' % (r['quote']['body'], r['quote']['author']))
 		if (sylco(b) > 5) and (sylco(b) < 12) and ("tant" not in name):
 			if (random.randint(0, 300) == 2) or (b.startswith("   ")):
-				if room == "mutants":
+				if (room == "mutants") or (room == "star fish"):
 					word = b.rsplit(None, 1)[-1].lower()
 					print word
 					rhymes = pronouncing.rhymes(word)
 					print rhymes
-					slines = open("mutants.log").read().splitlines()
+					if room=="mutants":
+						slines = open("mutants.log").read().splitlines()
+					if room=="star fish":
+						slines = open("star fish.log").read().splitlines()
 					random.shuffle(slines)
 					for sline in slines:
 						lastword = sline.rsplit(None, 1)[-1]
@@ -632,9 +635,14 @@ def commands(room, line):
 			threads = board.get_all_thread_ids()
 			threadid = random.choice(threads)
 			thread = board.get_thread(threadid)
-			topic = thread.topic
-			comment = topic.comment
-			send(room, comment.replace('<br>', ' '))
+			images = thread.files()
+			#topic = thread.topic
+			#imgfile = topic.first_file
+			#print topic.comment
+			#print imgfile.file_url
+			for f in thread.files():
+				send(room, f)
+				break
 
 		#twitter search
 		if b.startswith("!twit "):
@@ -647,7 +655,24 @@ def commands(room, line):
 						break
 			send(room, tweet.text)
 
+		if b=="!fortune\n":
+			r = requests.get("http://fortunecookieapi.herokuapp.com/v1/fortunes?limit=1000&skip=&page=")
+			i = random.randint(0,100)
+			r = r.json()
+			send(room, r[i]['message'])
 
+		if b.startswith("!horoscope "):
+			sign = b[11:].strip("\n")
+			r = requests.get("http://sandipbgt.com/theastrologer/api/horoscope/{}/today/".format(sign))
+			r = r.json()
+			horo, _ = r['horoscope'].split("(c)", 1)
+			mood = r['meta']['mood']
+			kw = r['meta']['keywords']
+			send(room, horo)
+			send(room, "your mood: {}".format(mood))
+			send(room, "you are feeling {}".format(kw))
+			
+			
 
 	except Exception:
 		print sys.exc_info()[0]
@@ -657,7 +682,10 @@ def commands(room, line):
 ###############  INIT  ###############
 
 #### TESTBOX ####
-
+r = requests.get("http://fortunecookieapi.herokuapp.com/v1/fortunes?limit=1000&skip=&page=")
+i = random.randint(0,100)
+r = r.json()
+print r[i]['message']
 #### TESTBOX ####
 
 #join star fish
@@ -675,7 +703,7 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-
+#timer = 0
 #initial clear of old logs
 for line in Pygtail("/home/gray/.museekd/logs/room/mutants"):
 	line = line
@@ -702,6 +730,11 @@ while True:
 	for line in Pygtail("/home/gray/.museekd/logs/room/star fish"):
 		commands('star fish', line)
 	time.sleep(1)
+#	timer += 1
+#	if timer == 300:
+#		send('mutants', 'https://www.youtube.com/watch?v=bOHxtOLfvIo')
+#		send('mutants', 'Hoobastank - Crawling In The Dark')
+#		timer = 0
 
 
 	#TODO
