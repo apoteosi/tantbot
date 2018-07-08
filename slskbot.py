@@ -697,6 +697,14 @@ def commands(room, line):
 			r = r.json()
 			send(room, r['value'])
 
+		if b.startswith("!gif "):
+			query = b[5:].strip("\n")
+			r = requests.get("https://api.gfycat.com/v1/gfycats/search?search_text={}".format(query))
+			r = r.json()
+			gfy = random.choice(r['gfycats'])
+			send(room, gfy['title'])
+			send(room, gfy['webpUrl'])
+
 	except Exception:
 		print sys.exc_info()[0]
 		print "i broke\n"
