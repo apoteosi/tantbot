@@ -24,6 +24,7 @@ from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 import pycorpora as corp
 import basc_py4chan
+from cowpy import cow
 
 ###############  FUNC  ###############
 
@@ -440,11 +441,15 @@ def commands(room, line):
 				send(room, "none found")
 
 		#clap emoji converter
-		if b.startswith("!clap "):
+		if b.startswith("!clap ") or b.startswith("     "):
 			text = b[6:]
 			claptext = "👏 " + text.replace(' ', ' 👏 ').strip('\n') + ' 👏'
 			send(room, claptext)
 
+		if b.startswith("!horn "):
+			text = b[6:]
+			claptext = "📣 " + text.replace(' ', ' 📣 ').strip('\n') + ' 📣'
+			send(room, claptext)
 		#gross
 		if b=="!brap\n":
 			send(room, "BRRRRAAAAAAAP")
@@ -552,7 +557,7 @@ def commands(room, line):
 			r = requests.get("https://favqs.com/api/qotd")
 			r = r.json()
 			send(room, '%s - %s' % (r['quote']['body'], r['quote']['author']))
-		if (sylco(b) > 5) and (sylco(b) < 12) and ("tant" not in name):
+		if ((sylco(b) > 4) and (sylco(b) < 12) and ("tant" not in name)) or b.startswith("   "):
 			if (random.randint(0, 300) == 2) or (b.startswith("   ")):
 				if (room == "mutants") or (room == "star fish"):
 					word = b.rsplit(None, 1)[-1].lower()
@@ -586,7 +591,7 @@ def commands(room, line):
 			line3 = ''
 			for sline in slines:
 				text = sline.rsplit(']',1)[-1][1:]
-				if sylco(text)==5:
+				if (sylco(text)==5) and ('http' not in text):
 					if line1 == '':
 						line1 = text
 					else:
@@ -594,7 +599,7 @@ def commands(room, line):
 						break
 			for sline in slines:
 				text = sline.rsplit(']',1)[-1][1:]
-				if sylco(text)==7:
+				if (sylco(text)==7) and ('http' not in text):
 					line2 = text
 			send(room, line1)
 			time.sleep(1)
@@ -663,14 +668,10 @@ def commands(room, line):
 
 		if b.startswith("!horoscope "):
 			sign = b[11:].strip("\n")
-			r = requests.get("http://sandipbgt.com/theastrologer/api/horoscope/{}/today/".format(sign))
+			r = requests.get("https://www.horoscopes-and-astrology.com/json")
 			r = r.json()
-			horo, _ = r['horoscope'].split("(c)", 1)
-			mood = r['meta']['mood']
-			kw = r['meta']['keywords']
+			horo, _ = r['dailyhoroscope'][sign.capitalize()].split('<', 1)
 			send(room, horo)
-			send(room, "your mood: {}".format(mood))
-			send(room, "you are feeling {}".format(kw))
 			
 		if b=="!iching\n":
 			num = random.randint(1,64)
@@ -704,6 +705,16 @@ def commands(room, line):
 			gfy = random.choice(r['gfycats'])
 			send(room, gfy['title'])
 			send(room, gfy['webpUrl'])
+		
+		if b.startswith("!num "):
+			num = b[5:].strip("\n")
+			r = requests.get("http://numbersapi.com/{}".format(num))
+			send(room, r.text)
+
+		if b.startswith("!cowsay "):
+			say = b[8:].strip("\n")
+			msg = cow.milk_random_cow(say)
+			send(room, msg)
 
 	except Exception:
 		print sys.exc_info()[0]
@@ -713,10 +724,9 @@ def commands(room, line):
 ###############  INIT  ###############
 
 #### TESTBOX ####
-r = requests.get("http://fortunecookieapi.herokuapp.com/v1/fortunes?limit=1000&skip=&page=")
-i = random.randint(0,100)
-r = r.json()
-print r[i]['message']
+
+r = requests.get("http://numbersapi.com/45")
+print r.text
 #### TESTBOX ####
 
 #join star fish
@@ -779,3 +789,4 @@ while True:
 	#youtube search
 	#set up files in sane directories
 	#number before ! to repeat commands
+	#move every command to its own function so that they can be called from other commands
