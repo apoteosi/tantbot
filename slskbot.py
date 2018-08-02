@@ -441,8 +441,11 @@ def commands(room, line):
 				send(room, "none found")
 
 		#clap emoji converter
-		if b.startswith("!clap ") or b.startswith("     "):
-			text = b[6:]
+		if b.startswith("!clap ") or b.startswith("  "):
+			if b.startswith("  ") and not b.startswith("   "):
+				text = b[2:]
+			else:
+				text = b[6:]
 			claptext = "👏 " + text.replace(' ', ' 👏 ').strip('\n') + ' 👏'
 			send(room, claptext)
 
